@@ -19,20 +19,37 @@ I will be building a simple todo list application and deploying on AWS cloud EC2
 Provisioned an EC2 Ubuntu instance on AWS
 
 
+![](/03.Images/3.ec2instance.png)
+
 After provisioning my EC2 Instance, Log into the instance via ssh
+
+
+![](/03.Images/3.ssh.png)
+
 
 ### Configuring the Backend
 
 Run `sudo apt update` and `sudo apt upgrade`  to update all default ubuntu dependencies to ensure compatibility during package installation.
 
+![](/03.Images/3.apt-update.png)
+
+![](/03.Images/3.apt-upgrade.png)
+
+
 Next up will be to install nodejs, first we get the location of nodejs form the ubuntu repository using the following command. `curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -`
+
+![](/03.Images/3.curl-bash.png)
 
 Then we install node.js on the server by running the command below
 `sudo apt-get install -y nodejs`
 
+![](/03.Images/3.install-nodejs.png)
+
 Now verify the node installation with the command below
 
 `node -v`
+
+![](/03.Images/3.node-v.png)
 
 ### Setting up the application
 
@@ -41,6 +58,8 @@ In setting up the application we first create a directory that will house our co
 `mkdir todo`
 
 Run the command `ls` to verify that the Todo directory is created.
+
+![](/03.Images/3.npm-init.png)
 
 
 Inside this directory we will initialise our project running the command `npm init`. This enables javascript to install packages useful for spinning up our application.
@@ -58,16 +77,19 @@ We will be installing express which is nodejs framework and will be helpful when
 
 `npm install express`
 
+![](/03.Images/3.npm-install-express.png)
+
 Create an index.js file with the command `touch index.js` which will contain code useful for spinning up our express server
 
 
 Install the ``dotenv`` module with the command ``npm install dotnev``
 
+![](/03.Images/3.npm-dotnev.png)
 
 Open the ``index.js`` file with the command ``vim index.js`` and type the code as seen in the image below.
 
 
-img
+![](/03.Images/3.uvi-indexjs.png)
 
 
 Now we start our server with the command ``node index.js``. The code in the image above is useful for starting up our application through the port specified in the code.
@@ -76,13 +98,13 @@ Now we start our server with the command ``node index.js``. The code in the imag
 Now we need to edit our inbound rules and open port 5000 in EC2 scurity groups.
 
 
-img
+![](/03.Images/3.tcp-5000.png)
 
 
 Accessing my servers public IP followed by port 5000 to see if the server is properly configured.
 
 
-img
+![](/03.Images/3.welcomeExpress.png)
 
 
 ### Defining The Routes For Our Application
@@ -135,6 +157,10 @@ Models are also used to define database schema, the Schema is a blueprint of how
 
 Inside the Todo folder, run `` npm install install mongoose``
 
+
+![](/03.Images/3.npminstall-mongoose.png)
+
+
 Create a models folder by running the command ``mkdir models`` and then create a file in it by running the command ``touch todo.js`` write the code below into the ``todo.js`` file
 
 To open the file created run ``vim todo.js``
@@ -157,7 +183,7 @@ const Todo = mongoose.model('todo', TodoSchema);
 module.exports = Todo;
 ```
 
-img
+![](/03.Images/3.vi-todojs.png)
 
 
 Now we update our routes from the file ``api.js`` in the routes directory to make use of the new model
@@ -198,7 +224,8 @@ Todo.findOneAndDelete({"_id": req.params.id})
 module.exports = router;
 ```
 
-img
+![](/03.Images/3.uvi-apijs.png)
+
 
 ## Step 4
 
@@ -209,20 +236,20 @@ We need a database where we will store our data. For this we will make use of mL
 Login into mLab and create a cluster
 
 
-img
+![](/03.Images/3.cluster.png)
 
 
 Create a database and a collection
 
 
-img
+![](/03.Images/3.cluster-todo.png)
 
 
 To connect mongoose(application_db) to our database service we connect it using the connection credential provided by mLab.
 
 
 
-img
+![](/03.Images/3.mlablink.png)
 
 
 
@@ -281,14 +308,14 @@ console.log(`Server running on port ${port}`)
 ```
 
 
-img
+![](/03.Images/3.uvi-indexjs.png)
 
 
 
 Start my server by running the command ``node index.js`` a message ‘Database connected successfully’ to show our backend is configured
 
 
-img
+![](/03.Images/3.database-successful.png)
 
 
 
@@ -299,15 +326,15 @@ So far we have written backend part of our To-Do application, and configured a d
 
 On postman make a POST request to our database while specifying an action in the body of the request.
 
-img
+![](/03.Images/3.POST.png)
 
 Then make a GET request to see if we can ger back what has been posted into the database.
 
-img
+![](/03.Images/3.GET.png)
 
 We can also make a delete request which deletes and entry using the id of each entry.
 
-img
+![](/03.Images/3.DELETE.png)
 
 
 ## Step 5
@@ -318,7 +345,7 @@ Frontend is the user interface for a web client (browser) to interact with the a
 
 In the Todo folder which is the same folder containing the backend code run ``npx create-react-app client`` this creates a folder containing the necessary packages required for react to work.
 
-img
+![](/03.Images/3.npxcreate-react.png)
 
 Install ``concurrrently`` and ``nodemon`` which are dependencies required for react to work.
 
@@ -327,10 +354,13 @@ npm install concurrently --save-dev
 npm install nodemon --save-dev
 ```
 
-img
+![](/03.Images/3.npm-ins-concurrently.png)
 
 
-Configure the ``package.json`` file by changing the code in the image below to this
+![](/03.Images/3.npm-install-nodemon.png)
+
+
+Configure the ``package.json`` file by changing the code to the code as shown below
 
 ```bash
 "scripts": {
@@ -340,21 +370,21 @@ Configure the ``package.json`` file by changing the code in the image below to t
 },
 ```
 
-img
+
 
 Configure proxy in ``package.json`` to ensure we can access our site via the url using ``http://localhost:5000``
 
 
-img
+![](/03.Images/3.vi-localhost5000.png)
 
 
 Now we run ``npm run dev`` inside the todo folder and the server is opened on port localhost:3000. Then we set inbound security group rule for port 3000.
 
 
-img
+![](/03.Images/3.npm-run-dev.png)
 
 
-img
+![](/03.Images/3.port-3000.png)
 
 
 ### Creation of React Components
@@ -414,7 +444,7 @@ return (
 export default Input
 ```
 
-img
+![](/03.Images/3.import-react.png)
 
 
 Ensure ``axios`` is installed in the client directory by running the command ``npm install axios``
@@ -451,7 +481,7 @@ return (
 export default ListTodo
 ```
 
-img
+![](/03.Images/3.import-react-react.png)
 
 
 In the ``Todo.js`` directory insert the code below
@@ -514,6 +544,11 @@ let { todos } = this.state;
 
 export default Todo;
 ```
+
+
+![](/03.Images/3.import-com-react.png)
+
+
 
 In the src directory open the ``App.css`` by running the command ``vi App.css`` and insert the code as shown below
 
@@ -631,7 +666,8 @@ monospace;
 
 For the final step go into the root directory ``Todo`` and run ``npm run dev``. To-do app is ready and functional.
 
-img
+
+![](/03.Images/Todo-app.png)
 
 
 
